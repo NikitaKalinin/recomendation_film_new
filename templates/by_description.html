@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+  <title>Рекомендации фильмов</title>
+</head>
+<body style="font-family:helvetica; background-color:rgb(239, 245, 245)">
+  <h1 style="text-align:center; color: rgb(29, 48, 48)">Давайте попробуем ввести какой-нибудь текст</h1>
+  <p style="text-align:center;">Если что, вводить текст в белый прямоугольник ниже</p>
+  <p style="text-align:center;">Затем нажмите на кнопку снизу чтобы встать на сторону зла.</p>
+  <script type="text/javascript">
+$(function() {
+    $("#autocomplete").autocomplete({
+        source:function(request, response) {
+            $.getJSON("{{url_for('autocomplete')}}",{
+                q: request.term, // in flask, "q" will be the argument to look for using request.args
+            }, function(data) {
+                response(data.matching_results); // matching_results from jsonify
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            console.log(ui.item.value); // not in your question, but might help later
+        }
+    });
+})
+</script>
+  <form action="/predict_by_desc" method='POST' >
+      <center>
+      <input name="autocomplete"  id="autocomplete" type="text"
+             class="form-control input-lg" ></input>
+      <br>
+      <button type="submit">Нажимать сюда</button>
+    </center>
+  </form>
+</body>
+</html>
